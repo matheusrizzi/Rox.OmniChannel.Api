@@ -1,0 +1,9 @@
+//COMO CRIAR UMA MIGRATION
+1-Precisa selecionar o projeto de infrastrucuture como startup
+2-abrir o package manager console e selecionar o projeto de infrastrucuture
+3-rodar o comando: dotnet ef migrations add tabelas_autenticacao
+
+//COMO EXECUTAR A MIGRATION
+1-Precisa selecionar o projeto de infrastrucuture como startup
+2-abrir o package manager console e selecionar o projeto de infrastrucuture
+3-rodar o comando: dotnet ef database update

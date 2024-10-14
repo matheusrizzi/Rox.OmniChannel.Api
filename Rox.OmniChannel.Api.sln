@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rox.OmniChannel.Api", "Rox.OmniChannel.Api\Rox.OmniChannel.Api.csproj", "{F31E7466-6F5B-4720-9851-15E7935E30B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.OmniChannel.Infrastructure", "Rox.OmniChannel.Infrastructure\Rox.OmniChannel.Infrastructure.csproj", "{BCD52E10-0C20-4634-AEC9-46DFD547BB31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rox.OmniChannel.Domain", "Rox.OmniChannel.Domain\Rox.OmniChannel.Domain.csproj", "{20DBEAB8-1B88-42CA-BEF0-CA273A3AE3DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F31E7466-6F5B-4720-9851-15E7935E30B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F31E7466-6F5B-4720-9851-15E7935E30B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F31E7466-6F5B-4720-9851-15E7935E30B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F31E7466-6F5B-4720-9851-15E7935E30B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCD52E10-0C20-4634-AEC9-46DFD547BB31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCD52E10-0C20-4634-AEC9-46DFD547BB31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCD52E10-0C20-4634-AEC9-46DFD547BB31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCD52E10-0C20-4634-AEC9-46DFD547BB31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20DBEAB8-1B88-42CA-BEF0-CA273A3AE3DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20DBEAB8-1B88-42CA-BEF0-CA273A3AE3DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20DBEAB8-1B88-42CA-BEF0-CA273A3AE3DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20DBEAB8-1B88-42CA-BEF0-CA273A3AE3DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7E229410-80CA-4F7A-A61F-335C1890221D}
+	EndGlobalSection
+EndGlobal
