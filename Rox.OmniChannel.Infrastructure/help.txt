@@ -1,3 +1,12 @@
+//GERAR A BASE INICIAL
+1-ABRIR O PACKAGE MANAGER CONSOLE E SELECIONAR O PROJETO INFRASTRUCTURE
+2-NA SOLUTION EXPLORAR CLICAR COM O BOTAO DIREITO DO MOUSE EM CIMA DO PROJETO INFRASTRUCUTURE E SETAR COMO PROJETO DE INICIALIZAÇÃO.
+EM INGLES É SET AS STARTUP PROJECT.
+3- NO PACKAGE MANAGER CONSOLE ACESSAR A PASTA DA INFRA 
+   dar um dir, e dar um cd para acessar a pasta da infra
+4- fazer o comando dotnet ef database update
+
+
 //COMO CRIAR UMA MIGRATION
 1-Precisa selecionar o projeto de infrastrucuture como startup
 2-abrir o package manager console e selecionar o projeto de infrastrucuture
