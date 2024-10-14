@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rox.OmniChannel.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Rox.OmniChannel.Infrastructure.Data;
 namespace Rox.OmniChannel.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241014034900_tenantRox")]
+    partial class tenantRox
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,14 +267,7 @@ namespace Rox.OmniChannel.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tenants", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "e67796b4-2679-418f-a67e-6a8b1d604da2",
-                            Name = "Rox"
-                        });
+                    b.ToTable("Tenants");
                 });
 
             modelBuilder.Entity("Rox.OmniChannel.Domain.Models.UserTenant", b =>

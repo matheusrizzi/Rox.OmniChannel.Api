@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Rox.OmniChannel.CrossCutting.Enums;
 using Rox.OmniChannel.Domain.Models;
+using Rox.OmniChannel.Domain.Repository;
 using Rox.OmniChannel.Infrastructure.Data;
+using Rox.OmniChannel.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -26,6 +30,7 @@ using (var scope = app.Services.CreateScope())
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     await CreateRoles(roleManager);
 }
+
 
 // Configura o pipeline de requisições HTTP.
 if (app.Environment.IsDevelopment())

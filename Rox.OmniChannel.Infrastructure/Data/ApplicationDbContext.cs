@@ -20,7 +20,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         base.OnModelCreating(builder);
 
         builder.ApplyConfiguration(new UserTenantMap())
-               .ApplyConfiguration(new CustomerMap());
+               .ApplyConfiguration(new CustomerMap())
+               .ApplyConfiguration(new TenantMap());
     }
 }
 
