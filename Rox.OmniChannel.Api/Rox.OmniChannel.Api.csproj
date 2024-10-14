@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Rox.OmniChannel.CrossCutting\Rox.OmniChannel.CrossCutting.csproj" />
     <ProjectReference Include="..\Rox.OmniChannel.Domain\Rox.OmniChannel.Domain.csproj" />
     <ProjectReference Include="..\Rox.OmniChannel.Infrastructure\Rox.OmniChannel.Infrastructure.csproj" />
   </ItemGroup>

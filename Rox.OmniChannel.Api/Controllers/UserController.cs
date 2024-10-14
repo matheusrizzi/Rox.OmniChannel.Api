@@ -4,6 +4,8 @@ using Rox.OmniChannel.Domain.Models;
 
 namespace Rox.OmniChannel.Api.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 public class UserController : Controller
 {
     [HttpPost]

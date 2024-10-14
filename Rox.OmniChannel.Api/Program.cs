@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Rox.OmniChannel.CrossCutting.Enums;
 using Rox.OmniChannel.Domain.Models;
 using Rox.OmniChannel.Infrastructure.Data;
 
@@ -20,8 +21,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 var app = builder.Build();
 
-// Chame o método para criar as roles.
-await CreateRoles(app.Services.GetRequiredService<RoleManager<IdentityRole>>());
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    await CreateRoles(roleManager);
+}
 
 // Configura o pipeline de requisições HTTP.
 if (app.Environment.IsDevelopment())
@@ -31,19 +35,19 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
 
 async Task CreateRoles(RoleManager<IdentityRole> roleManager)
 {
-    string[] roleNames = { "Admin", "Cliente" };
+    string[] roleNames = { ERoles.Administrator,
+                           ERoles.Customer, 
+                           ERoles.TenantManager };
+
     foreach (var roleName in roleNames)
     {
         if (!await roleManager.RoleExistsAsync(roleName))
-        {
             await roleManager.CreateAsync(new IdentityRole(roleName));
-        }
     }
 }
