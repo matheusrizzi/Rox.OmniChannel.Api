@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Rox.OmniChannel.Api.ViewModels;
 using Rox.OmniChannel.Domain.Dtos;
 using Rox.OmniChannel.Domain.Models;
 using Rox.OmniChannel.Domain.Repository;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Rox.OmniChannel.Api.Controllers;
 
@@ -11,10 +16,17 @@ namespace Rox.OmniChannel.Api.Controllers;
 public class UserController : Controller
 {
     private readonly IUserRepository _userRepository;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public UserController(IUserRepository userRepository)
+
+    public UserController(IUserRepository userRepository, 
+                          UserManager<ApplicationUser> userManager, 
+                          SignInManager<ApplicationUser> signInManager)
     {
         _userRepository = userRepository;
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
 
     [HttpPost]
@@ -38,6 +50,46 @@ public class UserController : Controller
         }
 
         return BadRequest(result.Errors);
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var user = await _userManager.FindByNameAsync(model.Username);
+        if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+        {
+            //var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+            //var tenantId = user.UserTenants.FirstOrDefault().TenantId; // Assume que o TenantId está armazenado no ApplicationUser
+
+            var token = GenerateJwtToken(user, "", "");
+            return Ok(new { token });
+        }
+
+        return Unauthorized();
+    }
+
+    private string GenerateJwtToken(ApplicationUser user, string tenantId, string role)
+    {
+        var key = Encoding.ASCII.GetBytes("b7082ed54770844823a4910d7d565b93");
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new Claim[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                //new Claim("TenantId", tenantId),  // Adiciona TenantId ao token
+                //new Claim(ClaimTypes.Role, role),  // Adiciona a role (Customer, TenantManager ou Admin)
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            }),
+            Expires = DateTime.UtcNow.AddHours(1),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
     }
 
 }
