@@ -29,6 +29,11 @@ public class UserRepository : IUserRepository
 
         if (result.Succeeded)
         {
+
+            // Verificar e associar a role correta ao usuário
+            var role = createUserDto.Role ?? "Customer"; // Caso não seja fornecido, assume que é "Customer"
+            await _userManager.AddToRoleAsync(user, role);
+
             // Associar o usuário aos tenants
             foreach (var tenantId in createUserDto.TenantIds)
             {

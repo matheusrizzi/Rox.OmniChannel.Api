@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Rox.OmniChannel.Api.ViewModels;
 using Rox.OmniChannel.Domain.Dtos;
@@ -52,37 +53,43 @@ public class UserController : Controller
         return BadRequest(result.Errors);
     }
 
-    [HttpPost("login")]
+    [HttpPost("Login")]
     public async Task<IActionResult> Login([FromBody] LoginViewModel model)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var user = await _userManager.FindByNameAsync(model.Username);
+        var user = await _userManager.Users
+                                     .Include(u => u.UserTenants) 
+                                     .FirstOrDefaultAsync(u => u.UserName == model.Username);
+
         if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
         {
-            //var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-            //var tenantId = user.UserTenants.FirstOrDefault().TenantId; // Assume que o TenantId está armazenado no ApplicationUser
+            var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
 
-            var token = GenerateJwtToken(user, "", "");
+            var token = GenerateJwtToken(user, role);
             return Ok(new { token });
         }
 
         return Unauthorized();
     }
 
-    private string GenerateJwtToken(ApplicationUser user, string tenantId, string role)
+    private string GenerateJwtToken(ApplicationUser user, string role)
     {
         var key = Encoding.ASCII.GetBytes("b7082ed54770844823a4910d7d565b93");
+
+        var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+        new Claim(ClaimTypes.Role, role),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+    };
+        foreach (var tenant in user.UserTenants)
+            claims.Add(new Claim("TenantId", tenant.TenantId));
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                //new Claim("TenantId", tenantId),  // Adiciona TenantId ao token
-                //new Claim(ClaimTypes.Role, role),  // Adiciona a role (Customer, TenantManager ou Admin)
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            }),
+            Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
@@ -91,5 +98,4 @@ public class UserController : Controller
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
-
 }
